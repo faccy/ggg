@@ -37,9 +37,15 @@ void Output(vector<T> v) {
 
 int main()
 {
+	//×Ö·û²âÊÔ
 	vector<char> myv = { 'h','i','a','c','e','d','b','g','f' };
 	Output(myv);
-	mySort(myv, 0, 7);
+	mySort(myv, 0, 8);
 	Output(myv);
+	//ÕûÊı²âÊÔ
+	vector<int> myv2 = { 3,5,2,7,3,9,1,32,8 };
+	Output(myv2);
+	mySort(myv2, 0, 8);
+	Output(myv2);
 	return 0;
 }
