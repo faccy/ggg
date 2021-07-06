@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-
-void mySort(vector<int>& v, int begin, int end) {
+template<class T>
+void mySort(vector<T>& v, int begin, int end) {
 	if (begin < end) {
 		int key = v[begin];
 		int i = begin, j = end;
@@ -27,8 +27,9 @@ void mySort(vector<int>& v, int begin, int end) {
 		}
 	}
 }
-void Output(vector<int> v) {
-	for (int ele : v) {
+template<class T>
+void Output(vector<T> v) {
+	for (auto ele : v) {
 		cout << ele << " ";
 	}
 	cout << endl;
@@ -36,7 +37,7 @@ void Output(vector<int> v) {
 
 int main()
 {
-	vector<int> myv = { 4,2,5,1,3,8,6,7 };
+	vector<char> myv = { 'h','i','a','c','e','d','b','g','f' };
 	Output(myv);
 	mySort(myv, 0, 7);
 	Output(myv);
