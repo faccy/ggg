@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 using namespace std;
 
 int main()
@@ -15,6 +15,6 @@ int main()
 	for (int i = 0; i <= temp; ++i) {
 		sum *= pow(2, dmin);
 	}
-	cout << "¹²ÓÐ" << sum << "ÖÖÂ·¾¶¡£" << endl;
+	cout << "å…±æœ‰" << sum << "ç§è·¯å¾„ã€‚" << endl;
 	return 0;
 }
