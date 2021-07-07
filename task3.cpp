@@ -2,94 +2,76 @@
 #include <fstream>
 #include <vector>
 using namespace std;
-
+class OFF {
+private:
+	int verticeNums; //顶点数
+	int faceNums; //面数
+	int edgeNums; //边数
+	vector<vector<double>> vertices; //顶点二维数组
+	vector<vector<int>> faces; //面数组
+public:
+	OFF(ifstream& in) {
+		string off;
+		in >> off;
+		in >> verticeNums >> faceNums >> edgeNums;
+		//顶点输入
+		vertices.resize(verticeNums);
+		for (int i = 0; i < verticeNums; ++i) {
+			vertices[i].resize(3);
+			for (int j = 0; j < 3; ++j) {
+				in >> vertices[i][j];
+			}
+		}
+		//面输入
+		faces.resize(faceNums);
+		for (int i = 0; i < faceNums; ++i) {
+			int num;
+			in >> num;
+			faces[i].resize(num + 1);
+			faces[i][0] = num;
+			for (int j = 1; j <= faces[i][0]; ++j) {
+				in >> faces[i][j];
+			}
+		}
+	}
+	//读取顶点的接口
+	vector<double> getPoint(int index) {
+		return vertices[index];
+	}
+	//读取面的顶点的接口
+	vector<vector<double>> getPointOfFace(int index) {
+		vector<vector<double>> res;
+		for (int i = 1; i <= faces[index][0]; ++i) {
+			res.push_back(vertices[faces[index][i]]);
+		}
+		return res;
+	}
+	void printInfo() {
+		cout << "文件已读取，共包含顶点" << verticeNums
+			<< "个，" << "面" << faceNums << "个" << endl;
+	}
+};
 int main()
 {
 	string fileRoad = "C:\\Users\\178QT73\\Desktop\\testFile.off";
 	ifstream openFile(fileRoad);
-	string off;
-	openFile >> off;
-	//顶点数，面数，边数
-	int verticeNums, faceNums, edgeNums;
-	openFile >> verticeNums >> faceNums >> edgeNums;
-	vector<vector<double>> vertices(verticeNums, vector<double>(3, 0));
-	vector<vector<int>> indexs;
-	vector<int> verticeNumsOfFace(faceNums, 0);
-	for (int i = 0; i < verticeNums; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			openFile >> vertices[i][j];
-		}
-	}
-	for (int i = 0; i < faceNums; ++i) {
-		openFile >> verticeNumsOfFace[i];
-		vector<int> indexOfFace(verticeNumsOfFace[i], 0);
-		for (int j = 0; j < verticeNumsOfFace[i]; ++j) {
-			openFile >> indexOfFace[j];
-		}
-		indexs.push_back(indexOfFace);
-	}
+	OFF off1(openFile);
 	openFile.close();
-	cout << "文件已读取，共包含顶点" << verticeNums << "个，" << "面" << faceNums << "个" << endl;
-	while (1) {
-		cout << "********************************" << endl;
-		cout << "您接下来的操作是：" << endl;
-		cout << "1. 查询顶点坐标" << endl;
-		cout << "2. 查询面的顶点坐标" << endl;
-		cout << "输入数字以选择,输入-1结束操作" << endl;
-		cout << "********************************" << endl;
-		int operation, index;
-		cin >> operation;
-		while (cin.fail()) {
-			cout << "输入不合法！请输入整数" << endl;
-			cin.clear();
-			cin.ignore();
-			cin >> operation;
+	off1.printInfo();
+	cout << "点测试：" << endl;
+	vector<double> point;
+	point = off1.getPoint(2);
+	for (double ele : point) {
+		cout << ele << " ";
+	}
+	cout << endl;
+	cout << "面测试：" << endl;
+	vector<vector<double>> pointOfFace = off1.getPointOfFace(3);
+	for (auto ele : pointOfFace) {
+		for (double sele : ele) {
+			cout << sele << " ";
 		}
-		switch (operation) {
-		case 1:
-			cout << "请输入要查询的顶点索引：" << endl;
-			cin >> index;
-			while (cin.fail()) {
-				cout << "输入不合法！请输入整数" << endl;
-				cin.clear();
-				cin.ignore();
-				cin >> index;
-			}
-			if (index < 0 || index > verticeNums) {
-				cout << "索引越界！返回主界面" << endl;
-				break;
-			}
-			for (int i = 0; i < 3; ++i) {
-				cout << vertices[index][i] << " ";
-			}
-			cout << endl;
-			break;
-		case 2:
-			cout << "请输入要查询的面索引：" << endl;
-			cin >> index;
-			while (cin.fail()) {
-				cout << "输入不合法！请输入整数" << endl;
-				cin.clear();
-				cin.ignore();
-				cin >> index;
-			}
-			if (index < 0 || index > faceNums) {
-				cout << "索引越界！返回主界面" << endl;
-				break;
-			}
-			for (int i = 0; i < indexs[index].size(); ++i) {
-				for (int j = 0; j < 3; ++j) {
-					cout << vertices[indexs[index][i]][j] << " ";
-				}
-				cout << endl;
-			}
-			cout << endl;
-			break;
-		case -1:
-			return 0;
-		default:
-			cout << "输入不合法！请输入整数" << endl;
-		}
+		cout << endl;
 	}
 	return 0;
 }
